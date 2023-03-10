@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  h1 Tasks
+  a.btn.btn-primary(href='/tasks/new') New Task
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th Target
+        th Status
+        th Account
+        th Options
+        th Log
+        th
+    tbody
+      each task in tasks
+        tr
+          td= task.name
+          td= task.target
+          td= task.status
+          td= task.taskAccount.account
+          td= JSON.stringify(task.options)
+          td= task.log
+          td
+            a.btn.btn-warning(href=`/tasks/${task.id}/edit`) Edit
+            form(action=`/tasks/${task.id}?_method=DELETE`, method='POST')
+              button.btn.btn-danger(type='submit') Delete
+            if task.status != 'finish' && task.status !='process'
+                form(action=`/tasks/${task.id}/start`, method='POST')
+                    input(type=`hidden`, name=`type` value=task.name)
+                    button.btn.btn-primary(type='submit') Start

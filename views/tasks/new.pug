@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  h1 New Task
+  form(action='/tasks', method='POST')
+    div.form-group
+      label(for='name') Name
+      select#name.form-control(name='name')
+        each name in taskName
+          option(value=name)= name
+    div.form-group
+      label(for='target') Target
+      input#target.form-control(type='text', name='target')
+    div.form-group
+      label(for='status') Status
+      input#status.form-control(type='text', name='status')
+    div.form-group
+      label(for='accountId') Account
+      select#accountId.form-control(name='accountId')
+        each account in accounts
+          option(value=account.id)= account.account
+    div.form-group
+      label(for='options') Options
+      input#options.form-control(type='text', name='options')
+    div.form-group
+      label(for='log') Log
+      input#log.form-control(type='text', name='log')
+    button.btn.btn-primary(type='submit') Save

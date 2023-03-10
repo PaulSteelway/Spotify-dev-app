@@ -1,0 +1,56 @@
+@import url('https://fonts.cdnfonts.com/css/proxima-nova-2');
+@import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
+
+body{
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.helvetica {
+    font-family: 'Helvetica Neue', sans-serif;
+}
+                
+.bg-black{
+    background:#202020
+}
+:root{
+    --bs-radius:1rem;
+}
+.btn-success{
+    background-color:#4DB76B;
+    border-color: #4DB76B;
+}
+.border-secondary {
+    border-color:#F5F5F5;
+}
+.text-secondary{
+    color:#F5F5F5;
+}
+.logo{
+    color: #4db76b !important;
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+}
+.rounded-xl {
+    border-radius: 1rem!important;
+}
+.btn-ggg li a{
+    margin: 1rem 4rem;
+    border-radius:1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+}
+.btn-ggg li a.active{
+    background-color: #4DB76B;
+
+}
+/* .rounded-l{
+    border-top-left-radius:var(--bs-radius)!important;
+    border-bottom-left-radius:var(--bs-radius)!important;
+}
+
+.rounded-r{
+    border-top-right-radius:var(--bs-radius)!important;
+    border-bottom-right-radius:var(--bs-radius)!important;
+} */

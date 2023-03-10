@@ -1,0 +1,101 @@
+//- extends layout.pug
+
+//- block content
+//-   p.mt-5.text-secondary Workflow
+//-   .border.border-secondary.rounded-xl.rounded.my-3
+//-     p.m-3 Add account 
+//-     table.table.table-bordered.table-striped.m-3
+//-       thead
+//-         tr
+//-           th Login
+//-           th Password
+//-           th Proxy
+//-           th
+//-             button.btn.btn-success(type='button') add
+              
+//-       tbody
+//-         tr
+//-           td example@gmail.com
+//-           td ******
+//-           td 127.0.0.1:8080
+//-           td
+//-             button.btn.btn-danger(type='button') del 
+              
+extends layout
+
+block content
+  .container-fluid
+    .row
+      .col-md-12
+        h1.text-center my-4 User Information
+        table.table.table-striped
+          thead
+            tr
+              th Login
+              th Password
+              th Proxy
+              th
+          tbody
+            each user in users
+              tr
+                td #{user.login}
+                td #{user.password}
+                td #{user.proxy}
+                td.text-center
+                  button.btn.btn-primary.btn-sm mr-2(type="button" data-toggle="modal" data-target="#editModal" data-user-id="#{user.id}")
+                    i.fa.fa-edit
+                  button.btn.btn-danger.btn-sm(type="button" data-toggle="modal" data-target="#deleteModal" data-user-id="#{user.id}")
+                    i.fa.fa-trash
+          tfoot
+            tr
+              td
+                input.form-control(type="text" name="login" placeholder="Login" required)
+              td
+                input.form-control(type="password" name="password" placeholder="Password" required)
+              td
+                input.form-control(type="text" name="proxy" placeholder="Proxy" required)
+              td.text-center
+                button.btn.btn-success(type="submit")
+                  i.fa.fa-plus
+        // Edit Modal
+        .modal.fade#editModal(tabindex="-1" role="dialog" aria-hidden="true")
+          .modal-dialog.modal-dialog-centered.modal-lg(role="document")
+            .modal-content
+              .modal-header
+                h5.modal-title Edit User
+                button.close(type="button" data-dismiss="modal" aria-label="Close")
+                  span(aria-hidden="true") &times;
+              form(action="/users/edit" method="POST")
+                .modal-body
+                  input(type="hidden" name="_method" value="PUT")
+                  input#editUserId(type="hidden" name="id")
+                  div.form-group
+                    label(for="editLogin") Login:
+                    input#editLogin.form-control(type="text" name="login" required)
+                  div.form-group
+                    label(for="editPassword") Password:
+                    input#editPassword.form-control(type="password" name="password" required)
+                  div.form-group
+                    label(for="editProxy") Proxy:
+                    input#editProxy.form-control(type="text" name="proxy" required)
+                .modal-footer
+                  button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+                  button.btn.btn-primary(type="submit") Save Changes
+        // Delete Modal
+        .modal.fade#deleteModal(tabindex="-1" role="dialog" aria-hidden="true")
+          .modal-dialog.modal-dialog-centered(role="document")
+            .modal-content
+              .modal-header
+                h5.modal-title Delete User
+                button.close(type="button" data-dismiss="modal" aria-label="Close")
+                  span(aria-hidden="true") &times;
+              form(action="/users/delete" method="POST")
+                .modal-body
+                  input(type="hidden" name="_method" value="DELETE")
+                  input#deleteUserId(type="hidden" name="id")
+                  p Are you sure you want to delete this user?
+                .modal-footer
+                  button.btn.btn-secondary(type="button" data-dismiss="modal") Close
+                  button.btn.btn-danger(type="submit") Delete
+
+    

@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  h1 View Proxy
+  table.table
+    tbody
+      tr
+        td Host
+        td= proxy.host
+      tr
+        td Credentials
+        td= proxy.credentials
+      tr
+        td Active
+        td= proxy.active
+  a.btn.btn-info.btn-sm(href=`/proxy/edit/${proxy.id}`) Edit
+  form(action=`/proxy/delete/${proxy.id}`, method='POST', style='display: inline;')
+    input.btn.btn-danger.btn-sm(type='submit', value='Delete')

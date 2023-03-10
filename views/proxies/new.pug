@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  h1 New Proxy
+  form(action='/proxy', method='POST')
+    .form-group
+      label(for='host') Host
+      input.form-control(type='text', id='host', name='host', required)
+    .form-group
+      label(for='credentials') Credentials
+      input.form-control(type='text', id='credentials', name='credentials', required)
+   
+    input.btn.btn-primary(type='submit', value='Create')

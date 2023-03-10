@@ -1,0 +1,21 @@
+
+
+nav.sidebar-sticky.bg-dark.navbar-dark.navbar-expand-md.h-100
+    .flex.text-center
+        a.logo.navbar-brand.text-center(href='#') prostool
+        button.navbar-toggler.text-right(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+    div.collapse.navbar-collapse#navbarSupportedContent
+    ul.navbar-nav.mr-auto.flex-column.btn-ggg
+        li.nav-item
+            a.nav-link(href='/accounts' class=(currentPage === '/accounts' ? 'active' : '')) Accounts
+        li.nav-item
+            a.nav-link(href='/proxy' class=(currentPage === '/proxy' ? 'active' : '')) Proxy
+        li.nav-item
+            a.nav-link(href='/tasks' class=(currentPage === '/tasks' ? 'active' : '')) Tasks
+        li.nav-item
+            a.nav-link(href='/monitoring' class=(currentPage === '/monitoring' ? 'active' : '')) Monitoring
+        li.nav-item
+            a.nav-link(href='#' class=(currentPage === '#' ? 'active' : '')) Statistics
+
+

@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  .container-fluid
+    h1.text-center.mb-4 Accounts
+    a.btn.btn-primary(href='/accounts/new') Add Account
+    table.table.table-striped
+      thead
+        tr
+          th Account
+          th Password
+          th Authorization
+          th proxy
+          th Actions
+      tbody
+        each account in accounts
+          tr
+            td= account.account
+            td= account.password
+            td 
+                if account.cookies && account.token
+                    p.badge.bg-success +
+                else
+                    p.badge.bg-warning -
+            td
+                if account.proxyAccount && account.proxyAccount.host
+                    p= account.proxyAccount.host
+                else 
+                    p Empty
+            td
+              a.btn.btn-primary(href=`/accounts/${account.id}`) View
+              a.btn.btn-warning(href=`/accounts/${account.id}/edit`) Edit
+              if !account.cookies || !account.token
+                form(action=`/accounts/${account.id}/check`,method='POST')
+                    button.btn.btn-success(type='submit') Check
+              form(action=`/accounts/${account.id}?_method=DELETE`, method='POST')
+                button.btn.btn-danger(type='submit') Delete

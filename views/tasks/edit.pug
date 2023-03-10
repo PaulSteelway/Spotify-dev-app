@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1 Edit Task
+  form(action=`/tasks/${task.id}?_method=PUT`, method='POST')
+    div.form-group
+      label(for='name') Name
+      input#name.form-control(type='text', name='name', value=task.name)
+    div.form-group
+      label(for='target') Target
+      input#target.form-control(type='text', name='target', value=task.target)
+    div.form-group
+      label(for='status') Status
+      input#status.form-control(type='text', name='status', value=task.status)
+    div.form-group
+      label(for='accountId') Account
+      select#accountId.form-control(name='accountId')
+        each account in accounts
+          if account.id === task.accountId
+            option(value=account.id, selected)= account.name
+          else
+            option(value=account.id)= account.name
+    div.form-group
+      label(for='options') Options
+      input#options.form-control(type='text', name='options', value=JSON.stringify(task.options))
+    div.form-group
+      label(for='log') Log
+      input#log.form-control(type='text', name='log', value=task.log)
+    button.btn.btn-primary(type='submit') Save

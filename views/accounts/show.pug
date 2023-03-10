@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  .container-fluid
+    h1.text-center.mb-4 Account Details
+    dl.row
+      dt.col-sm-2 Account
+      dd.col-sm-10= account.account
+      dt.col-sm-2 Password
+      dd.col-sm-10= account.password
+      dd.col-sm-2 Proxy
+      dd.col-sm-10= account.proxyAccount.host
+    a.btn.btn-warning(href=`/accounts/${account.id}/edit`) Edit
+    form(action=`/accounts/${account.id}?_method=DELETE`, method='POST')
+      button.btn.btn-danger(type='submit') Delete

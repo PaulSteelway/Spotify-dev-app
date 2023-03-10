@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  div.container-fluid
+    h1.text-center My Proxies
+    div.row
+      div.col-12.col-md-6.offset-md-3
+        a.btn.btn-primary(href='/proxy/new') Add Proxy
+    div.row
+      div.col-12.col-md-8.offset-md-2
+        table.table.table-hover
+          thead
+            tr
+              th Host
+              th Credentials
+              th Active
+              th Edit
+              th Delete
+          tbody
+            each proxy in proxies
+              tr
+                td= proxy.host
+                td= proxy.credentials
+                td
+                  if proxy.active
+                    span.badge.bg-success Active
+                  else
+                    span.badge.bg-danger Inactive
+                td
+                  a.btn.btn-warning(href=`/proxy/${proxy.id}/edit`) Edit
+                  form(method='POST' action=`/proxy/${proxy.id}/check`)
+                    button.btn.btn-primary(type='submit') Check proxy
+                td
+                  form(method='POST' action=`/proxy/${proxy.id}?_method=DELETE`)
+                    button.btn.btn-danger(type='submit') Delete
