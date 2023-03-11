@@ -66,7 +66,7 @@ module.exports.Get = async function (id, type) {
         }
 
         const device = await Player.getStatus()
-        console.log(device);
+        console.log("device:",device);
         if (!device.error) {
             const play = await Player.play(arr);
             // console.log(da)

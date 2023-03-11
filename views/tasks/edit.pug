@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   h1 Edit Task
-  form(action=`/tasks/${task.id}?_method=PUT`, method='POST')
+  form(action=`/tasks/${task.id}`, method='POST')
     div.form-group
       label(for='name') Name
       input#name.form-control(type='text', name='name', value=task.name)
@@ -17,9 +17,9 @@ block content
       select#accountId.form-control(name='accountId')
         each account in accounts
           if account.id === task.accountId
-            option(value=account.id, selected)= account.name
+            option(value=account.id, selected)= account.account
           else
-            option(value=account.id)= account.name
+            option(value=account.id)= account.account
     div.form-group
       label(for='options') Options
       input#options.form-control(type='text', name='options', value=JSON.stringify(task.options))

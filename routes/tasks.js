@@ -69,9 +69,9 @@ router.get('/:id/edit', async (req, res) => {
 });
 
 // Update a task
-router.put('/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
     const updatedTask = req.body;
-    await Task.update(updatedTask, {
+    const task = await Task.update(updatedTask, {
         where: {
             id: req.params.id
         }
