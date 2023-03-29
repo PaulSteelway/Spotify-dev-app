@@ -3,7 +3,7 @@ extends ../layout
 block content
   .container-fluid
     h1.text-center.mb-4 Edit Account
-    form(action=`/accounts/${account.id}`, method='PUT')
+    form(action=`/accounts/${account.id}`, method='POST')
       .form-group
         label(for='account') Account
         input.form-control(type='text', name='account', placeholder='Enter account', value=account.account)

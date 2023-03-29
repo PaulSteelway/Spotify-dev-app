@@ -45,7 +45,8 @@ class Browser {
         }
         options.addArguments(USER_AGENT);
         options.addArguments('--disable-gpu');
-        options.addArguments('--headless');
+        options.addArguments('--disable-blink-features=AutomationControlled');
+        // options.addArguments('--headless');
         options.addArguments('--no-sandbox');
         options.addArguments('--disable-dev-shm-usage');
         options.addArguments('--disable-setuid-sandbox');
@@ -70,34 +71,34 @@ class Browser {
             }
         }
 
-
-        // const sessionStorageString = fs.readFileSync(DIR_PATH+"sessionStorage.json",'utf8',(err)=>{if(err)throw err});
-        // const sessionStorage = JSON.parse(sessionStorageString);
-
-        // const localStorageString = fs.readFileSync(DIR_PATH+"localStorage.json",'utf8',(err)=>{if(err)throw err});
-        // // const localStorage = JSON.parse(localStorageString);
-        // const localStorageData = await driver.executeScript(`Object.keys(arguments[0]).forEach(key => localStorage.setItem(key, arguments[0][key]))`, localStorage);
-        // const sessionStorageData = await driver.executeScript(`Object.keys(arguments[0]).forEach(key => sessionStorage.setItem(key, arguments[0][key]))`, sessionStorage);
-        // console.log(localStorage);
+        
         this.driver.get('https://spotify.com');
 
 
         const session = await this.driver.wait(until.elementLocated(By.id('session')));
 
-        if (!session) {
+        if (! session) {
             return 401
         } else {
-            await new Promise(resolve => setTimeout(resolve, 10000));
-            const closeButtonContainer = await this.driver.findElement(By.id('onetrust-close-btn-container'));
-            if (closeButtonContainer) {
-              const closeButton = await closeButtonContainer.findElement(By.tagName('button'));
-              await closeButton.click();
-            }
-            await new Promise(resolve => setTimeout(resolve, 2220));
+            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 10000)));
+            try {
+                const closeButtonContainer = await this.driver.findElement(By.id('onetrust-close-btn-container'));
+                if (closeButtonContainer) {
+                  const closeButton = await closeButtonContainer.findElement(By.tagName('button'));
+                  await closeButton.click();
+                  await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 10000)));
+                }
+              } catch (error) {
+                console.log(error);
+                // Обработка ошибки
+              }
 
             const playButton = await this.driver.wait(until.elementLocated(By.css('button[data-testid="play-button"]')));
+            if (!playButton){
+                return "error";
+            }
             await this.driver.executeScript("arguments[0].click();", playButton);
-            await new Promise(resolve => setTimeout(resolve, 10000));
+            await new Promise(resolve => setTimeout(resolve, Math.floor(Math.random() * 10000)));
 
             let screenshot = await this.driver.takeScreenshot();
             fs.writeFileSync('screenshot.png', screenshot, 'base64');

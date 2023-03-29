@@ -7,6 +7,7 @@ const {
 } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const proxy = require('selenium-webdriver/proxy');
+const USER_AGENT = '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
 
 
 module.exports.check = async function (id) {
@@ -40,6 +41,18 @@ module.exports.check = async function (id) {
         }
 
 
+        options.addArguments(USER_AGENT);
+        options.addArguments('--disable-gpu');
+        options.addArguments('--disable-blink-features=AutomationControlled');
+        options.addArguments('--headless');
+        options.addArguments('--no-sandbox');
+        options.addArguments('--disable-dev-shm-usage');
+        options.addArguments('--disable-setuid-sandbox');
+        options.addArguments('--window-size=1920,1080');
+        this.driver = await new Builder()
+            .forBrowser('chrome')
+            .setChromeOptions(options)
+            .build();
 
 
         const driver = await new Builder()

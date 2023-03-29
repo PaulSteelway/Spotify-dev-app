@@ -84,7 +84,8 @@ router.get('/:id', async (req, res) => {
 });
 
 // Delete an account
-router.delete('/:id', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
+    console.log('delete account',req.params.id)
     await db.accounts.destroy({
         where: {
             id: req.params.id

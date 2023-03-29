@@ -134,7 +134,7 @@ router.post('/', async (req, res) => {
 });
 
 // Обновление прокси по ID
-router.put('/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
     const id = req.params.id;
     const {
         host,
@@ -161,7 +161,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Удаление прокси по ID
-router.delete('/:id', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
     const id = req.params.id;
     try {
         const proxy = await Proxy.findByPk(id);

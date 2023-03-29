@@ -109,7 +109,8 @@ router.post('/:id/start', async (req, res) => {
 });
 
 // Delete a task
-router.delete('/:id', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
+    console.log('da')
     await Task.destroy({
         where: {
             id: req.params.id
