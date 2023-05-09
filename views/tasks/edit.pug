@@ -21,8 +21,8 @@ block content
           else
             option(value=account.id)= account.account
     div.form-group
-      label(for='options') Options
-      input#options.form-control(type='text', name='options', value=JSON.stringify(task.options))
+      label(for='duration') duration
+      input#options.form-control(type='text', name='duration', value=task.options.duration)
     div.form-group
       label(for='log') Log
       input#log.form-control(type='text', name='log', value=task.log)

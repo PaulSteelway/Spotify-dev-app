@@ -41,7 +41,9 @@ router.get('/new', async (req, res) => {
 
 // Create a new task
 router.post('/', async (req, res) => {
-    const newTask = req.body;
+    let newTask = req.body;
+    options = {duration: req.body.duration};
+    newTask.options = options;
     await Task.create(newTask);
     res.redirect('/tasks');
 });
@@ -70,7 +72,9 @@ router.get('/:id/edit', async (req, res) => {
 
 // Update a task
 router.post('/:id', async (req, res) => {
-    const updatedTask = req.body;
+    let updatedTask = req.body;
+    options = {duration: req.body.duration};
+    updatedTask.options = options
     const task = await Task.update(updatedTask, {
         where: {
             id: req.params.id

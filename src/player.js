@@ -74,7 +74,25 @@ class player {
             return 200;
         }
     }
+    async next(){
+        const headers = {
+            'Authorization': `Bearer ${this.auth}`,
+            'Content-Type': 'application/json'
+        };
+        await this.getStatus();
+        const options = {
+            url: `https://api.spotify.com/v1/me/player/next`,
+            method: 'POST',
+            headers: headers,
+        };
+        try {
+            const response = await axios(options);
+            console.log(response.data);
+        } catch (error) {
+            console.error(`Error: ${error}`);
+        }
 
+    }
     async play_pause() {
         const headers = {
             'Authorization': `Bearer ${this.auth}`,

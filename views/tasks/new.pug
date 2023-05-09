@@ -12,16 +12,16 @@ block content
       label(for='target') Target
       input#target.form-control(type='text', name='target')
     div.form-group
-      label(for='status') Status
-      input#status.form-control(type='text', name='status')
+      //- label(for='status') Status
+      input#status.form-control(type='hidden', name='status' value='Start')
     div.form-group
       label(for='accountId') Account
       select#accountId.form-control(name='accountId')
         each account in accounts
           option(value=account.id)= account.account
     div.form-group
-      label(for='options') Options
-      input#options.form-control(type='text', name='options')
+      label(for='duration') Duration
+      input#options.form-control(type='text', name='duration')
     div.form-group
       label(for='log') Log
       input#log.form-control(type='text', name='log')

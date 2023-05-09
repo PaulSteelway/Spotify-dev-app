@@ -81,15 +81,28 @@ class TokenValidator {
     if (data) {
       config.data = data;
     }
+    // console.log('dsadasdsa')
     if (this.proxyAgent) {
       config.httpsAgent = this.proxyAgent;
     }
     try {
+      // console.log('dsadas22dsa')
+
       const response = await axios(config);
+      // console.log(response.data)
+      // axios(config)
+      // .then(response => {
+      //   const result = response.data;
+      //   console.log('Результат:', result);
+
+      // })
+      // .catch(error => {
+      //   console.error('Ошибка:', error);
+      // });
       const result = response.data;
-
-
       return result;
+
+
     } catch (error) {
       // console.log('request failed:', error.response.data);
       if (error.response && error.response.data) return error.response.data
@@ -179,7 +192,10 @@ class TokenValidator {
   // }
 
   async checkTokenValidity() {
-    return await this.sendRequest('/v1/me');
+    console.log('check56')
+    const req = await this.sendRequest('/v1/me');
+    console.log(req)
+    return req;
   }
   async refreshAccessToken() {
     try {
@@ -196,6 +212,7 @@ class TokenValidator {
         config.httpsAgent = this.proxyAgent;
       }
       const response = await axios.get('https://open.spotify.com/get_access_token?reason=transport', config);
+      console.log('check2')
 
       const result = response.data;
 

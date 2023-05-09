@@ -10,7 +10,7 @@ block content
         th Target
         th Status
         th Account
-        th Options
+        //- th Options
         th Log
         th
     tbody
@@ -19,8 +19,12 @@ block content
           td= task.name
           td= task.target
           td= task.status
-          td= task.taskAccount.account
-          td= JSON.stringify(task.options)
+          if task.taskAccount
+            td= task.taskAccount.account
+          else 
+            td
+          
+          //- td= JSON.stringify(task.options)
           td= task.log
           td
             a.btn.btn-warning(href=`/tasks/${task.id}/edit`) Edit

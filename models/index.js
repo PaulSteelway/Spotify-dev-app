@@ -112,7 +112,7 @@ const Task = sequelize.define('task', {
 Proxy.hasMany(Account,{as:'accounts',foreignKey:'proxyId'});
 Account.belongsTo(Proxy, {as:'proxyAccount',foreignKey:'proxyId'});
 
-Account.hasMany(Task,{as:'tasks',foreignKey:'accountId'});
+Account.hasMany(Task,{as:'tasks',foreignKey:'accountId', onDelete:'CASCADE'});
 Task.belongsTo(Account,{as:'taskAccount',foreignKey:'accountId'});
 
 db.accounts = Account;
