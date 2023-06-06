@@ -73,10 +73,10 @@ router.get('/:id', async (req, res) => {
     const account = await db.accounts.findByPk(req.params.id,{include: [{
         model: db.proxies,
         as: 'proxyAccount',
-        
+
     }]});
-    console.log(account.proxyAccount)
-    
+    console.log(account)
+
     res.render('accounts/show', {
         account,
         currentPage: '/accounts'

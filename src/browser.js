@@ -11,22 +11,26 @@ const TokenValidator = require('./tokenValidator')
 const player = require('./player')
 const HttpsProxyAgent = require('https-proxy-agent');
 const USER_AGENT = '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
+const xvfb = require('xvfb');
 
 class Browser {
     constructor(userdata) {
         this.driver = null;
-        this.userdata = userdata
+        this.userdata = userdata;
+        this.xvfbInstance = null;
     }
 
 
 
     async start() {
 
+        this.xvfbInstance = new xvfb();
+        await this.xvfbInstance.startSync();
         const options = new chrome.Options();
         const proxydata = this.userdata.proxyAccount;
         if (proxydata) {
 
-            
+
 
             const proxyUrl = `http://${proxydata.credentials}@${proxydata.host}`
             // const proxyUrl = 'http://H0vFDG:XoDcR2@45.92.22.6:8000';
@@ -71,7 +75,7 @@ class Browser {
             }
         }
 
-        
+
         this.driver.get('https://spotify.com');
 
 
@@ -92,7 +96,9 @@ class Browser {
                 console.log(error);
                 // Обработка ошибки
               }
-
+            // try{
+            //
+            // }
             const playButton = await this.driver.wait(until.elementLocated(By.css('button[data-testid="play-button"]')));
             if (!playButton){
                 return "error";
@@ -114,6 +120,8 @@ class Browser {
     async stop() {
         await this.driver.quit();
         this.driver = null;
+        await this.xvfbInstance.stopSync();
+        this.xvfbInstance = null;
     }
 }
 

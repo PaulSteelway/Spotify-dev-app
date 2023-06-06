@@ -227,7 +227,7 @@ class TokenValidator {
 
       return result;
     } catch (error) {
-      console.error(error.response.data, apiCall);
+      console.error(error.response.data);
       return error.response.data
     }
   }

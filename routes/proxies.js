@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-const HttpsProxyAgent = require('https-proxy-agent');
+// const HttpsProxyAgent = require('https-proxy-agent');
 const Proxy = db.proxies;
-const axios = require('axios');
+const axios = require('axios-https-proxy-fix');
 // Получение всех прокси
 router.get('/', async (req, res) => {
     try {
@@ -21,34 +21,43 @@ router.get('/', async (req, res) => {
 router.post('/:id/check', async (req, res) => {
 
 
-    const testUrl = 'https://www.google.com'; // URL для проверки
+    const testUrl = 'https://www.example.com'; // URL для проверки
 
     try {
         const proxy = await Proxy.findByPk(req.params.id);
         if (!proxy) {
             return res.status(404).send('Proxy not found');
         }
-        
-        
-        const agent = new HttpsProxyAgent({
-            host: proxy.host.split(':')[0],
-            port: parseInt(proxy.host.split(':')[1]),
-            auth: proxy.credentials
-          });
-        const response = await axios.get(testUrl, {
-            httpsAgent:agent,
-        });
-        
+
+        const config = {
+            proxy: {
+              host: proxy.host.split(':')[0],
+              port: parseInt(proxy.host.split(':')[1]),
+              auth: {
+                username: proxy.credentials.split(':')[0],
+                password: proxy.credentials.split(':')[1]
+              }
+            }
+          };
+          console.log(config)
+        // const agent = new HttpsProxyAgent({
+        //     host: proxy.host.split(':')[0],
+        //     port: parseInt(proxy.host.split(':')[1]),
+        //     auth: proxy.credentials
+        //   });
+        const response = await axios.get(testUrl, config);
+        console.log(response)
         // Проверяем статус ответа
         if (response.status === 200) {
             await proxy.update({
                 active: true
             });
-            res.redirect('/proxy');            
+            res.redirect('/proxy');
             // res.send({
             //     status: 'working'
             // });
         } else {
+
             await proxy.update({
                 active: false
             });
@@ -58,9 +67,7 @@ router.post('/:id/check', async (req, res) => {
             // });
         }
     } catch (error) {
-        await proxy.update({
-            active: false
-        });
+
         res.redirect('/proxy');
         // res.send({
         //     status: 'not working'
@@ -78,7 +85,7 @@ router.get('/:id/edit', async (req, res) => {
     const id = req.params.id;
     try {
         const proxy = await Proxy.findByPk(id);
-        
+
         if (!proxy) {
             return res.status(404).send('Proxy not found');
         }

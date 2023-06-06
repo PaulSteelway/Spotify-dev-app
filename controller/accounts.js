@@ -8,8 +8,8 @@ const {
 const chrome = require('selenium-webdriver/chrome');
 const proxy = require('selenium-webdriver/proxy');
 const USER_AGENT = '--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36';
-
-
+const fs = require('fs');
+const xvfb = require('xvfb');
 module.exports.check = async function (id) {
 
     try {
@@ -24,13 +24,15 @@ module.exports.check = async function (id) {
         }
         // console.log(data.account)
 
+        const xvfbInstance = new xvfb();
+        xvfbInstance.startSync();
 
         const options = new chrome.Options();
 
-        
 
 
-       
+
+
         if (data.proxyAccount) {
             const proxyUrl = `http://${data.proxyAccount.credentials}@${data.proxyAccount.host}`;
             options.setProxy(proxy.manual({
@@ -40,34 +42,44 @@ module.exports.check = async function (id) {
 
         }
 
-
+        console.log('sdada')
         options.addArguments(USER_AGENT);
         options.addArguments('--disable-gpu');
         options.addArguments('--disable-blink-features=AutomationControlled');
-        options.addArguments('--headless');
+        // options.addArguments('--headless');
         options.addArguments('--no-sandbox');
         options.addArguments('--disable-dev-shm-usage');
         options.addArguments('--disable-setuid-sandbox');
         options.addArguments('--window-size=1920,1080');
-        this.driver = await new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(options)
-            .build();
 
 
         const driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
             .build();
-        // console.log('Logging on to Spotify.')
+
+        // await driver.get('https://example.com');
         await driver.get('https://accounts.spotify.com/en/login?continue=https:%2F%2Fopen.spotify.com%2F');
-        await driver.findElement(By.id('login-username')).sendKeys(data.account);
-        await driver.findElement(By.id('login-password')).sendKeys(data.password, Key.RETURN);
 
+        const loginInput = await driver.wait(until.elementLocated(By.id('login-username')));
+
+        // const login = await driver.findElement(By.id('login-username'));
+        await loginInput.click();
+        await loginInput.sendKeys(data.account);
+        // await driver.findElement(By.id('login-username')).sendKeys(data.account);
+        const passwordInput = await driver.wait(until.elementLocated(By.id('login-password')));
+
+        await passwordInput.sendKeys(data.password, Key.RETURN);
+        //
+        console.log('dadaa')
+        await driver.sleep(5000); // задержка в 5 секунд
+
+        let screenshot = await driver.takeScreenshot();
+        fs.writeFileSync('screenshot.png', screenshot, 'base64');
+        console.log('screenshot')
         const sessionScript = await driver.wait(until.elementLocated(By.id('session')));
-
+        console.log('Logging on to Spotify.')
         const sessionElement = await sessionScript.getAttribute('text')
-
 
         const token_info = JSON.parse(sessionElement.trim());
 
@@ -80,6 +92,7 @@ module.exports.check = async function (id) {
         });
 
 
+        console.log('s223a')
 
         await setTimeout(async () => {
             await driver.quit();
@@ -95,15 +108,16 @@ module.exports.check = async function (id) {
                 id
             },
         });
-        
-        
 
-        // console.log(save);
+
+
+        console.log(save);
 
 
         process.on('SIGINT', () => {
             console.log('Interrupted!');
             driver.quit();
+            xvfbInstance.stopSync();
             process.exit();
         });
         // const tokenValidator = new TokenValidator(data);

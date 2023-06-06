@@ -22,6 +22,7 @@ module.exports.Get = async function (id, type) {
         if (!data) {
             throw new Error(`Task with id ${id} not found`);
         }
+        // await browser.connect()
         const tokenValidator = new TokenValidator(data.taskAccount);
         const Player = new player(tokenValidator);
         // console.log(2)
@@ -29,14 +30,25 @@ module.exports.Get = async function (id, type) {
         // console.log(3)
         // console.log(check)
         if (check?.error && check?.error.status == 401) {
-            await tokenValidator.refreshAccessToken()
-        }
+            // const resReq = await tokenValidator.refreshAccessToken();
+            // if (resReq?.error && resReq?.error.status == 401){
+              const save = {
+                token:null,
+                cookies:null
+              }
+              const result = await db.accounts.update(save, {
+                  where: {
+                      id:data.taskAccount.id
+                  },
+              });
+              throw new Error('auth failed');
+            }
         let result, arr;
         let total_duration = 10000;
         switch (type) {
             case 'artist':
                 result = await tokenValidator.sendRequest(`/v1/artists/${data.target}/top-tracks?country=US`, 'get');
-                
+
                 arr = result.tracks.map((item) => item.uri)
                 result.trakcs.forEach(track => {
                     total_duration += parseInt(track.duration_ms);
@@ -59,11 +71,13 @@ module.exports.Get = async function (id, type) {
         }
         // type = 'artist';
         // data.target = '6YXbPlxhFq1u9wRF3MiGTb';
+        // console.log(1)
+        // console.log(3)
         const browser = new Browser(data.taskAccount);
         // console.log(data.taskAccount)
         await browser.start();
-        // console.log(1)
-        // console.log(3)
+
+        // await browser.play();
         await db.tasks.update({
             status: 'process'
         }, {
@@ -71,10 +85,10 @@ module.exports.Get = async function (id, type) {
                 id
             }
         })
-        
+
 
         const device = await Player.getStatus()
-        
+
         console.log("device:",device);
         if (!device.error) {
             const play = await Player.play(arr);
@@ -83,7 +97,7 @@ module.exports.Get = async function (id, type) {
         }
         console.log('dasda')
         const duration = data.options.duration? data.options.duration*1000 : null;
-        
+
         if (duration){
             await new Promise(resolve => setTimeout(resolve, duration));
             if (result.items?.length > 0){
@@ -97,7 +111,7 @@ module.exports.Get = async function (id, type) {
             await new Promise(resolve => setTimeout(resolve, total_duration));
 
         }
-                
+
         await browser.stop();
 
         await db.tasks.update({
@@ -148,7 +162,7 @@ module.exports.like = async function (id, type) {
         }
         switch (type) {
             case 'artist':
-                // let put = 
+                // let put =
                 result = await tokenValidator.sendRequest(`/v1/me/following?type=artist&ids=${data.target}`, 'PUT');
                 break;
             case 'playlist':
@@ -167,7 +181,11 @@ module.exports.like = async function (id, type) {
             }
         })
 
-
+        process.on('SIGINT', () => {
+            console.log('Interrupted!');
+            browser.stop();
+            process.exit();
+        });
     } catch (error) {
         // обработка ошибки
         console.error(`Error while processing task ${id}: ${error.message}`);
